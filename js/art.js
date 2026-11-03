@@ -75,11 +75,11 @@
       ${aura}
       <g filter="url(#sh-${uid})">
         ${stage >= 3 ? crown() : ""}
-        <ellipse cx="64" cy="150" rx="16" ry="12" fill="${col}" stroke="#141414" stroke-width="4"/>
-        <ellipse cx="136" cy="150" rx="16" ry="12" fill="${col}" stroke="#141414" stroke-width="4"/>
+        <ellipse class="limb limb-a" cx="64" cy="150" rx="16" ry="12" fill="${col}" stroke="#141414" stroke-width="4"/>
+        <ellipse class="limb limb-b" cx="136" cy="150" rx="16" ry="12" fill="${col}" stroke="#141414" stroke-width="4"/>
         ${body(word.shape || 0, col, belly)}
-        <ellipse cx="74" cy="188" rx="16" ry="10" fill="${mix(col, 0.2)}" stroke="#141414" stroke-width="4"/>
-        <ellipse cx="126" cy="188" rx="16" ry="10" fill="${mix(col, 0.2)}" stroke="#141414" stroke-width="4"/>
+        <ellipse class="foot foot-l" cx="74" cy="188" rx="16" ry="10" fill="${mix(col, 0.2)}" stroke="#141414" stroke-width="4"/>
+        <ellipse class="foot foot-r" cx="126" cy="188" rx="16" ry="10" fill="${mix(col, 0.2)}" stroke="#141414" stroke-width="4"/>
         ${face(!!o.hungry)}
         <text x="100" y="168" text-anchor="middle" font-size="34">${emo}</text>
       </g>
