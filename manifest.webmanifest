@@ -1,0 +1,15 @@
+{
+  "name": "어휘 탐험대: 워드몬 세계의 비밀",
+  "short_name": "워드몬",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
