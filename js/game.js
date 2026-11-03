@@ -288,7 +288,7 @@
     const svg = window.WMArt.creature(word, o);
     if (word.verb && word.act && !o.silhouette) {
       const cls = "act-stage act-" + word.act + (o.cls ? " " + o.cls : "");
-      return '<div class="' + cls + '"><div class="act-bg"></div><div class="mon">' + svg + '</div><div class="act-prop"></div><div class="act-fx"></div></div>';
+      return '<div class="' + cls + '"><div class="act-bg"></div><div class="mover"><div class="mon">' + svg + '</div><div class="act-prop"></div><div class="act-fx"></div></div></div>';
     }
     return '<div class="mon ' + (o.cls || "") + '">' + svg + "</div>";
   }
@@ -407,20 +407,23 @@
       boss = '<div class="boss-wrap">' + window.WMArt.boss(battle.bossHp < battle.bossMax) + '</div><div class="hp"><div style="width:' + pct + '%"></div></div><p class="small">망각몬 힘 ' + battle.bossHp + "/" + battle.bossMax + "</p>";
     }
     const prog = (battle.index + 1) + "/" + battle.items.length;
-    return '<div class="screen">' + header(title, back) +
+    const fit = battle.phase === "learn" || battle.phase === "learn-done" || battle.phase === "success" || battle.phase === "retry" || battle.phase === "feedfail";
+    return '<div class="screen' + (fit ? " fit-screen" : "") + '">' + header(title, back) +
       '<div class="battle-top"><span class="hearts">' + hearts + "</span>" + combo + "<b>🪙 " + state.gold + "</b>" + timer + "<span>" + prog + "</span></div>" +
       (state.fever ? '<div class="fever-banner">WORD FEVER</div>' : "") +
       boss + body + "</div>";
   }
 
   function renderLearn(word) {
-    const num = battle.count ? '<div class="count-num">' + battle.count + "</div>" : '<p class="hint">잘 들어요</p>';
+    const num = battle.count ? '<div class="count-num">' + battle.count + "</div>" : '<p class="hint tight">잘 들어요</p>';
     const go = battle.phase === "learn-done" ? '<button type="button" class="btn btn-yellow" data-act="learn-go">배틀 시작!</button>' : "";
-    const sample = word.verb ? '<p class="black-note">' + esc(word.sentence) + "</p>" : "";
-    return '<div class="panel">' + art(word.id, { cls: "lg", stage: 1, hungry: false }) +
-      '<p class="en-chip"><span class="en">' + esc(word.en) + '</span></p><p class="ko">' + esc(word.ko) + "</p>" + sample +
-      '<p class="hint">따라 말해 보세요 ' + battle.rep + "/3</p>" + num +
-      '<button type="button" class="btn btn-dark" data-act="replay">🔊 다시 듣기</button>' + go + "</div>";
+    const sample = word.verb ? '<p class="sample">' + esc(word.sentence) + "</p>" : "";
+    return '<div class="panel learn-card">' +
+      '<div class="learn-art">' + art(word.id, { cls: "lg", stage: 1, hungry: false }) + "</div>" +
+      '<p class="en-chip"><span class="en">' + esc(word.en) + "</span></p>" +
+      '<p class="ko">' + esc(word.ko) + "</p>" + sample +
+      '<p class="hint tight">따라 말해 보세요 ' + battle.rep + "/3</p>" + num +
+      '<div class="learn-actions"><button type="button" class="btn btn-dark" data-act="replay">🔊 다시 듣기</button>' + go + "</div></div>";
   }
 
   function renderRecog(word) {
@@ -478,7 +481,12 @@
     const mon = art(word.id, { cls: "lg", silhouette: !shown, stage: st.stage || 1, hungry: false });
     const beam = battle.justRescued && !battle.reveal ? '<div class="beam"></div>' : "";
     const name = (word.names && word.names[(st.stage || 1) - 1]) || word.en;
-    return '<div class="panel">' + beam + mon + '<p class="en-chip"><span class="en">' + esc(word.en) + '</span></p><p class="ko">' + esc(word.ko) + '</p><p class="black-note">' + esc(name) + "  ·  +" + battle.lastGold + ' 골드</p><button type="button" class="btn btn-yellow" data-act="next">다음</button></div>';
+    return '<div class="panel learn-card">' +
+      '<div class="learn-art">' + beam + mon + "</div>" +
+      '<p class="en-chip"><span class="en">' + esc(word.en) + "</span></p>" +
+      '<p class="ko">' + esc(word.ko) + "</p>" +
+      '<p class="sample">' + esc(name) + "  ·  +" + battle.lastGold + " 골드</p>" +
+      '<div class="learn-actions"><button type="button" class="btn btn-yellow" data-act="next">다음</button></div></div>';
   }
 
   function renderRetry() {

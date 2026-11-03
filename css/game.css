@@ -239,7 +239,64 @@ button.btn:active { transform: translateY(2px) scale(0.98); }
 }
 .en-chip .en { color: #ffe600; text-shadow: none; }
 .hint { color: #111; font-weight: 800; margin: 6px 0; }
-.picture-row { display: flex; justify-content: center; align-items: flex-end; gap: 6px; }
+.picture-row { display: flex; justify-content: center; align-items: center; gap: 6px; width: 100%; }
+
+.fit-screen {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px 10px;
+}
+.fit-screen .top { margin-bottom: 4px; flex: none; }
+.fit-screen .top h1 { font-size: 22px; }
+.fit-screen .battle-top { flex: none; margin-bottom: 4px; }
+.fit-screen .boss-wrap { width: 110px; height: 72px; flex: none; margin: 0 auto; }
+.fit-screen .small { flex: none; margin: 0; }
+.learn-card {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 4px 10px 8px;
+  overflow: hidden;
+}
+.learn-art {
+  flex: 0 1 auto;
+  height: min(46vh, 360px);
+  width: min(92vw, 400px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.learn-art > .mon,
+.learn-art > .act-stage {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.learn-card .en-chip { margin: 0; padding: 4px 14px; flex: none; }
+.learn-card .en { font-size: clamp(36px, 6.5vh, 64px); }
+.learn-card .ko { font-size: clamp(18px, 3vh, 26px); margin: 0; color: #111; flex: none; }
+.learn-card .sample { margin: 0; color: #111; font-weight: 800; font-size: clamp(16px, 2.6vh, 22px); flex: none; }
+.learn-card .hint.tight { margin: 0; font-size: clamp(15px, 2.4vh, 20px); flex: none; }
+.learn-card .count-num {
+  width: clamp(58px, 10vh, 92px);
+  height: clamp(58px, 10vh, 92px);
+  font-size: clamp(36px, 7vh, 64px);
+  margin: 2px auto;
+  border-radius: 18px;
+  flex: none;
+}
+.learn-actions { display: flex; gap: 8px; width: 100%; flex: none; margin-top: 4px; }
+.learn-actions .btn { min-height: 52px; font-size: 20px; width: auto; flex: 1; }
 
 .slots {
   display: flex;
@@ -517,7 +574,7 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
   .title { font-size: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mon, .wander, .boss-wrap, .node.open, body.fever #app { animation: none; }
+  .mon, .mover, .wander, .boss-wrap, .node.open, body.fever #app { animation: none; }
 }
 .world-banner {
   background: #111111;
@@ -535,12 +592,22 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
 .act-stage {
   position: relative;
   width: 150px;
-  height: 180px;
+  height: 170px;
   margin: 0 auto;
 }
-.act-stage.lg { width: 220px; height: 200px; }
-.act-stage.sm { width: 92px; height: 112px; }
-.act-stage .mon { width: 86%; height: 86%; margin: 0 auto; position: relative; z-index: 2; }
+.act-stage.sm { width: 92px; height: 104px; }
+.act-stage .mover {
+  position: absolute;
+  left: 6%;
+  top: 4%;
+  width: 88%;
+  height: 88%;
+  z-index: 2;
+}
+.act-stage .mover .mon { width: 100%; height: 100%; margin: 0; position: relative; animation: none; }
+.act-stage .mover .act-prop,
+.act-stage .mover .act-fx { position: absolute; inset: 0; }
+.foot, .limb { transform-box: fill-box; transform-origin: center top; }
 .act-bg, .act-prop, .act-fx { position: absolute; inset: 0; pointer-events: none; }
 .act-prop::before, .act-prop::after, .act-fx::before, .act-fx::after {
   position: absolute;
@@ -548,27 +615,39 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
   color: #111;
 }
 
-.act-run .mon { animation: act-run 0.5s ease-in-out infinite; }
-.act-run .act-fx::before, .act-run .act-fx::after {
+.act-run .mover { animation: act-run 0.48s ease-in-out infinite; }
+.act-run .foot-l, .act-walk .foot-l, .act-hop .foot-l { animation: stride 0.32s ease-in-out infinite; }
+.act-run .foot-r, .act-walk .foot-r, .act-hop .foot-r { animation: stride 0.32s ease-in-out infinite reverse; }
+.act-run .limb-a, .act-walk .limb-a { animation: stride 0.32s ease-in-out infinite reverse; }
+.act-run .limb-b, .act-walk .limb-b { animation: stride 0.32s ease-in-out infinite; }
+.act-run .act-fx::before, .act-run .act-fx::after, .act-run .act-prop::before {
   content: "";
-  width: 12px; height: 12px; border-radius: 50%;
-  background: #ffe600; border: 2px solid #111;
-  bottom: 8px; animation: puff 0.5s infinite;
+  border-radius: 50%;
+  background: #ffe600;
+  border: 3px solid #111;
+  bottom: 6%;
+  animation: puff 0.48s infinite;
 }
-.act-run .act-fx::before { left: 22%; bottom: 22%; }
-.act-run .act-fx::after { left: 40%; bottom: 22%; animation-delay: 0.2s; }
+.act-run .act-fx::before { width: 36px; height: 36px; left: 0; bottom: 2%; }
+.act-run .act-fx::after { width: 24px; height: 24px; left: 18%; bottom: 0; animation-delay: 0.12s; }
+.act-run .act-prop::before { width: 16px; height: 16px; left: 34%; bottom: 4%; animation-delay: 0.24s; }
 
 .act-swim .act-bg {
-  top: auto; height: 46%;
-  background: linear-gradient(#4dabf7, #1864ab);
-  border: 3px solid #111; border-radius: 0 0 18px 18px;
+  top: 38%;
+  height: 62%;
+  background: repeating-linear-gradient(90deg, #4dabf7 0 22px, #1864ab 22px 44px);
+  border: 4px solid #111;
+  border-radius: 46% 46% 18px 18px;
+  animation: wave 0.7s linear infinite;
 }
-.act-swim .mon { animation: act-swim 1.1s ease-in-out infinite; }
+.act-swim .mover { animation: act-swim 0.9s ease-in-out infinite; }
+.act-swim .limb-a, .act-swim .foot-l { animation: paddle 0.45s ease-in-out infinite; }
+.act-swim .limb-b, .act-swim .foot-r { animation: paddle 0.45s ease-in-out infinite reverse; }
 
-.act-jump .mon { animation: act-jump 0.8s ease-in-out infinite; }
-.act-hop .mon { animation: act-hop 0.55s ease-in-out infinite; }
-.act-walk .mon { animation: act-walk 0.9s ease-in-out infinite; }
-.act-fly .mon { animation: act-fly 1.3s ease-in-out infinite; }
+.act-jump .mover { animation: act-jump 0.8s ease-in-out infinite; }
+.act-hop .mover { animation: act-hop 0.55s ease-in-out infinite; }
+.act-walk .mover { animation: act-walk 0.9s ease-in-out infinite; }
+.act-fly .mover { animation: act-fly 1.3s ease-in-out infinite; }
 .act-fly .act-fx::before { content: "☁"; left: 6px; top: 8px; font-size: 26px; color: #111; animation: drift 2s linear infinite; }
 .act-fly .act-fx::after { content: "☁"; right: 8px; top: 28px; font-size: 18px; color: #fff; -webkit-text-stroke: 2px #111; animation: drift 2.4s linear infinite reverse; }
 
@@ -581,29 +660,29 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
 .act-ride .act-prop::before { left: 22%; }
 .act-ride .act-prop::after { right: 22%; }
 .act-ride .act-bg { top: auto; height: 8px; background: #111; border-radius: 4px; }
-.act-ride .mon { animation: act-ride 0.6s ease-in-out infinite; }
+.act-ride .mover { animation: act-ride 0.6s ease-in-out infinite; }
 
 .act-climb .act-prop {
   width: 18px; left: 14px; top: 8px; bottom: 8px;
   border-left: 4px solid #111; border-right: 4px solid #111;
   background: repeating-linear-gradient(#ffe600 0 5px, transparent 5px 16px);
 }
-.act-climb .mon { animation: act-climb 1.6s ease-in-out infinite; }
+.act-climb .mover { animation: act-climb 1.6s ease-in-out infinite; }
 
 .act-play .act-prop::before, .act-kick .act-prop::before, .act-catch .act-prop::before, .act-throw .act-prop::before {
   content: ""; width: 26px; height: 26px; border-radius: 50%;
   background: #ff6b6b; border: 3px solid #111; bottom: 12px; right: 10px;
 }
 .act-play .act-prop::before { animation: ball 0.7s ease-in-out infinite; }
-.act-play .mon { animation: act-dance 0.8s ease-in-out infinite; }
-.act-kick .mon { animation: act-kick 0.8s ease-in-out infinite; }
+.act-play .mover { animation: act-dance 0.8s ease-in-out infinite; }
+.act-kick .mover { animation: act-kick 0.8s ease-in-out infinite; }
 .act-kick .act-prop::before { animation: kickball 0.8s ease-in infinite; }
 .act-catch .act-prop::before { animation: catchball 1s ease-in infinite; right: auto; left: 6px; top: 0; }
-.act-throw .mon { animation: act-kick 0.9s ease-in-out infinite reverse; }
+.act-throw .mover { animation: act-kick 0.9s ease-in-out infinite reverse; }
 .act-throw .act-prop::before { animation: throwball 0.9s ease-in infinite; background: #ffe600; }
 
-.act-dance .mon { animation: act-dance 0.7s ease-in-out infinite; }
-.act-sing .mon { animation: act-sing 0.8s ease-in-out infinite; }
+.act-dance .mover { animation: act-dance 0.7s ease-in-out infinite; }
+.act-sing .mover { animation: act-sing 0.8s ease-in-out infinite; }
 .act-sing .act-fx::before, .act-sing .act-fx::after {
   font-size: 28px; color: #111; text-shadow: 0 0 0 #111;
   animation: note 1.2s ease-in infinite;
@@ -617,26 +696,26 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
   background: linear-gradient(90deg, #ffe600 50%, #fff 50%);
   border: 3px solid #111; border-radius: 3px;
 }
-.act-read .mon { animation: act-read 1.3s ease-in-out infinite; }
+.act-read .mover { animation: act-read 1.3s ease-in-out infinite; }
 .act-write .act-prop::before {
   content: ""; height: 6px; left: 18%; right: 18%; bottom: 16px; background: #111;
   transform-origin: left center; animation: write-line 1.2s linear infinite;
 }
 .act-write .act-fx::before { content: "✎"; right: 12px; bottom: 22px; font-size: 26px; color: #111; animation: act-kick 1.2s linear infinite; }
-.act-write .mon { animation: act-read 1.2s ease-in-out infinite; }
+.act-write .mover { animation: act-read 1.2s ease-in-out infinite; }
 
 .act-eat .act-prop::before {
   content: ""; width: 22px; height: 22px; border-radius: 50%;
   background: #ff6b6b; border: 3px solid #111; right: 18px; top: 46%;
   animation: to-mouth 1s ease-in-out infinite;
 }
-.act-eat .mon { animation: act-eat 0.6s ease-in-out infinite; }
+.act-eat .mover { animation: act-eat 0.6s ease-in-out infinite; }
 .act-drink .act-prop::before {
   content: ""; width: 18px; height: 26px; border-radius: 0 0 8px 8px;
   background: #4dabf7; border: 3px solid #111; right: 16px; top: 42%;
   animation: to-mouth 1.1s ease-in-out infinite;
 }
-.act-drink .mon { animation: act-read 1.1s ease-in-out infinite; }
+.act-drink .mover { animation: act-read 1.1s ease-in-out infinite; }
 
 .act-open .act-prop {
   width: 54px; height: 78px; left: 8px; top: 28px;
@@ -649,7 +728,7 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
   content: ""; width: 36px; height: 28px; background: #fff; border: 3px solid #111;
   left: 16px; bottom: 16px;
 }
-.act-draw .mon { animation: act-read 0.8s ease-in-out infinite; }
+.act-draw .mover { animation: act-read 0.8s ease-in-out infinite; }
 
 .act-wash .act-fx::before, .act-wash .act-fx::after {
   content: ""; width: 16px; height: 16px; border-radius: 50%;
@@ -658,16 +737,16 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
 }
 .act-wash .act-fx::before { left: 20%; bottom: 20px; }
 .act-wash .act-fx::after { left: 48%; bottom: 12px; animation-delay: 0.4s; width: 12px; height: 12px; }
-.act-wash .mon { animation: act-swim 1.2s ease-in-out infinite; }
+.act-wash .mover { animation: act-swim 1.2s ease-in-out infinite; }
 
 .act-make .act-prop::before, .act-make .act-prop::after {
   content: ""; width: 22px; height: 22px; border: 3px solid #111; bottom: 12px;
 }
 .act-make .act-prop::before { background: #ffe600; left: 28%; animation: stack 1.2s ease-in-out infinite; }
 .act-make .act-prop::after { background: #ff6b6b; left: 48%; animation: stack 1.2s ease-in-out infinite 0.3s; }
-.act-make .mon { animation: act-eat 0.8s ease-in-out infinite; }
+.act-make .mover { animation: act-eat 0.8s ease-in-out infinite; }
 
-.act-sleep .mon { animation: act-sleep 1.8s ease-in-out infinite; }
+.act-sleep .mover { animation: act-sleep 1.8s ease-in-out infinite; }
 .act-sleep .act-fx::before, .act-sleep .act-fx::after {
   content: "z"; font-size: 22px; color: #111; font-weight: 900;
   animation: note 1.6s ease-in infinite;
@@ -686,24 +765,27 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
 }
 .act-cook .act-fx::before { left: 42%; }
 .act-cook .act-fx::after { left: 54%; animation-delay: 0.35s; }
-.act-cook .mon { animation: act-read 1s ease-in-out infinite; }
+.act-cook .mover { animation: act-read 1s ease-in-out infinite; }
 
-@keyframes act-run { 0%,100% { transform: translateX(-10px) rotate(-8deg); } 50% { transform: translateX(12px) rotate(7deg) translateY(-8px); } }
-@keyframes act-swim { 0%,100% { transform: translateY(6px) rotate(-14deg); } 50% { transform: translate(14px, -8px) rotate(10deg); } }
-@keyframes act-jump { 0%,100% { transform: translateY(12px) scale(1.05, 0.9); } 45% { transform: translateY(-36px) scale(0.95, 1.08); } }
-@keyframes act-hop { 0%,100% { transform: translate(0, 8px); } 50% { transform: translate(16px, -24px); } }
-@keyframes act-walk { 0%,100% { transform: translateX(-8px) rotate(-4deg); } 50% { transform: translateX(8px) rotate(4deg); } }
-@keyframes act-fly { 0%,100% { transform: translateY(12px) rotate(-8deg); } 50% { transform: translateY(-26px) rotate(8deg); } }
-@keyframes act-ride { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-@keyframes act-climb { 0% { transform: translate(16px, 24px); } 100% { transform: translate(16px, -20px); } }
-@keyframes act-dance { 0%,100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg) translateY(-6px); } }
-@keyframes act-sing { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08) translateY(-4px); } }
-@keyframes act-kick { 0%,100% { transform: rotate(0); } 40% { transform: rotate(-20deg) translateX(6px); } }
-@keyframes act-read { 0%,100% { transform: rotate(0); } 50% { transform: rotate(6deg) translateY(3px); } }
-@keyframes act-eat { 0%,100% { transform: scale(1); } 40% { transform: scale(1.06, 0.9); } }
-@keyframes act-sleep { 0%,100% { transform: rotate(-8deg) translateY(6px); } 50% { transform: rotate(-4deg) translateY(8px) scale(1.03); } }
-@keyframes puff { 0% { transform: scale(0.4); opacity: 1; } 100% { transform: translateX(-12px) scale(1); opacity: 0; } }
-@keyframes ball { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-40px); } }
+@keyframes act-run { 0%,100% { transform: translate(-26%, 16%) rotate(-14deg); } 45% { transform: translate(8%, -30%) rotate(4deg); } 70% { transform: translate(30%, 8%) rotate(14deg); } }
+@keyframes act-swim { 0%,100% { transform: translate(-24%, 20%) rotate(-32deg); } 50% { transform: translate(28%, -6%) rotate(26deg); } }
+@keyframes act-jump { 0%,100% { transform: translateY(24%) scale(1.18, 0.72); } 42% { transform: translateY(-46%) scale(0.88, 1.18); } 72% { transform: translateY(8%) scale(1.05, 0.9); } }
+@keyframes act-hop { 0%,100% { transform: translate(-8%, 18%) scale(1.1, 0.8); } 50% { transform: translate(22%, -40%) scale(0.9, 1.12); } }
+@keyframes act-walk { 0%,100% { transform: translateX(-22%) rotate(-8deg); } 50% { transform: translateX(22%) rotate(8deg); } }
+@keyframes act-fly { 0%,100% { transform: translate(-10%, 22%) rotate(-16deg); } 50% { transform: translate(12%, -36%) rotate(14deg); } }
+@keyframes act-ride { 0%,100% { transform: translateX(-8%) translateY(4%); } 50% { transform: translateX(8%) translateY(-14%); } }
+@keyframes act-climb { 0% { transform: translate(8%, 28%); } 100% { transform: translate(8%, -36%); } }
+@keyframes act-dance { 0%,100% { transform: rotate(-22deg) translateY(4%); } 50% { transform: rotate(22deg) translateY(-16%); } }
+@keyframes act-sing { 0%,100% { transform: scale(1) translateY(6%); } 50% { transform: scale(1.16) translateY(-12%); } }
+@keyframes act-kick { 0%,100% { transform: rotate(8deg); } 40% { transform: rotate(-34deg) translateX(12%); } }
+@keyframes act-read { 0%,100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(10deg) translateY(6%); } }
+@keyframes act-eat { 0%,100% { transform: scale(1) rotate(0); } 35% { transform: scale(1.14, 0.82) rotate(-6deg); } }
+@keyframes act-sleep { 0%,100% { transform: rotate(-16deg) translateY(10%) scale(1.05); } 50% { transform: rotate(-6deg) translateY(14%) scale(1.1); } }
+@keyframes stride { 0%,100% { transform: rotate(42deg); } 50% { transform: rotate(-42deg); } }
+@keyframes paddle { 0%,100% { transform: rotate(55deg); } 50% { transform: rotate(-60deg); } }
+@keyframes puff { 0% { transform: translate(16px, 0) scale(0.35); opacity: 1; } 100% { transform: translate(-36px, -10px) scale(1.35); opacity: 0; } }
+@keyframes ball { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-70px) scale(1.1); } }
+@keyframes wave { from { background-position: 0 0; } to { background-position: 44px 0; } }
 @keyframes kickball { 0%,25% { transform: translate(0,0); opacity: 1; } 100% { transform: translate(46px, -18px); opacity: 0; } }
 @keyframes catchball { 0% { transform: translate(0,0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(28px, 40px); } }
 @keyframes throwball { 0%,20% { transform: translate(0,10px); opacity: 1; } 100% { transform: translate(-20px, -50px); opacity: 0; } }
@@ -719,7 +801,7 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
 @keyframes stack { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .act-stage .mon, .act-prop, .act-prop::before, .act-prop::after, .act-fx::before, .act-fx::after, .act-bg { animation: none !important; }
+  .act-stage .mon, .act-stage .mover, .act-prop, .act-prop::before, .act-prop::after, .act-fx::before, .act-fx::after, .act-bg { animation: none !important; }
 }
 @media print {
   body { background: #fff !important; }
@@ -727,6 +809,6 @@ h2.sec { color: #ffe600; margin: 18px 0 8px; font-size: 22px; }
   .no-print { display: none !important; }
   .print-sheet { gap: 4mm; }
   .print-card { height: 64mm; min-height: 0; overflow: hidden; }
-  .act-stage .mon, .act-prop, .act-prop::before, .act-prop::after, .act-fx::before, .act-fx::after { animation: none !important; }
+  .act-stage .mon, .act-stage .mover, .act-prop, .act-prop::before, .act-prop::after, .act-fx::before, .act-fx::after { animation: none !important; }
   @page { size: A4; margin: 8mm; }
 }
