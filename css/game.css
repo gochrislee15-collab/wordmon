@@ -94,6 +94,22 @@ button.btn-white { background: #ffffff !important; color: #111111 !important; }
 button.btn.icon { width: 56px; min-height: 56px; padding: 0; font-size: 26px; flex: none; }
 button.btn:active { transform: translateY(2px) scale(0.98); }
 .stack { display: flex; flex-direction: column; gap: 12px; }
+a.game-link, a.game-link:visited, a.game-link:hover, a.game-link:active {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: #101826;
+  color: #ffe600;
+  border: 3px solid #ffffff;
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+}
 .row { display: flex; gap: 10px; flex-wrap: wrap; }
 .row > .btn { flex: 1; }
 

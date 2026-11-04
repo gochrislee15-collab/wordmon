@@ -336,6 +336,7 @@
       '<button type="button" class="btn btn-dark" data-act="base">어휘 아지트</button>' +
       '<button type="button" class="btn btn-dark" data-act="jail">망각의 감옥 ' + (jailed ? '<span class="badge">' + jailed + "</span>" : "") + "</button>" +
       '<button type="button" class="btn btn-green" data-act="feed">배고픈 워드몬 밥 주기 ' + (hungry ? '<span class="badge">' + hungry + "</span>" : "") + "</button>" +
+      '<div class="row more-games"><a class="game-link" href="./munjang/">문장크래프트</a><a class="game-link" href="./space/">우주 단어 슈팅</a></div>' +
       "</div></div>";
   }
 
